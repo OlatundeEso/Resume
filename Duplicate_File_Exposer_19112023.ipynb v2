@@ -1,0 +1,193 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "T4",
+      "authorship_tag": "ABX9TyOsppY7eByfCi82MOErUwtl",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/OlatundeEso/Resume/blob/main/Duplicate_File_Exposer_19112023.ipynb%20v2\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "import shutil\n",
+        "\n",
+        "def compare_and_create_union_and_duplicates_directories(dir1, dir2, union_dir, duplicates_dir):\n",
+        "    # Create the union directory if it doesn't exist\n",
+        "    if not os.path.exists(union_dir):\n",
+        "        os.makedirs(union_dir)\n",
+        "\n",
+        "    # Create the duplicates directory if it doesn't exist\n",
+        "    if not os.path.exists(duplicates_dir):\n",
+        "        os.makedirs(duplicates_dir)\n",
+        "\n",
+        "    # Get the list of files in each directory\n",
+        "    files_dir1 = set(os.listdir(dir1))\n",
+        "    files_dir2 = set(os.listdir(dir2))\n",
+        "\n",
+        "    # Find the union of files\n",
+        "    union_files = files_dir1.union(files_dir2)\n",
+        "\n",
+        "    # Find the intersection of files (duplicates)\n",
+        "    duplicate_files = files_dir1.intersection(files_dir2)\n",
+        "\n",
+        "    # Copy files from dir1 to union directory\n",
+        "    for file in union_files:\n",
+        "        source_path1 = os.path.join(dir1, file)\n",
+        "        destination_path = os.path.join(union_dir, file)\n",
+        "        if os.path.exists(source_path1):\n",
+        "            shutil.copy2(source_path1, destination_path)\n",
+        "\n",
+        "    # Copy files from dir2 to union directory\n",
+        "    for file in union_files:\n",
+        "        source_path2 = os.path.join(dir2, file)\n",
+        "        destination_path = os.path.join(union_dir, file)\n",
+        "        if os.path.exists(source_path2):\n",
+        "            shutil.copy2(source_path2, destination_path)\n",
+        "\n",
+        "    # Copy duplicate files to duplicates directory\n",
+        "    for file in duplicate_files:\n",
+        "        source_path1 = os.path.join(dir1, file)\n",
+        "        source_path2 = os.path.join(dir2, file)\n",
+        "        destination_path = os.path.join(duplicates_dir, file)\n",
+        "\n",
+        "        if os.path.exists(source_path1):\n",
+        "            shutil.copy2(source_path1, destination_path)\n",
+        "        elif os.path.exists(source_path2):\n",
+        "            shutil.copy2(source_path2, destination_path)\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    # Replace these paths with the paths of your directories\n",
+        "    directory1_path = \"/content/firstdownload\" # On Colab, Create a folder called firstdownload\n",
+        "    directory2_path = \"/content/seconddesktop\" # Same as above Create a 2nd folder called seconddesktop\n",
+        "    union_directory_path = \"C:/Users/user/Desktop/union_dir\"\n",
+        "    duplicates_directory_path = \"C:/Users/user/Desktop/duplicate_dir\"\n",
+        "\n",
+        "    compare_and_create_union_and_duplicates_directories(directory1_path, directory2_path, union_directory_path, duplicates_directory_path)\n"
+      ],
+      "metadata": {
+        "id": "owi6lNkUGiHH"
+      },
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "CODE WITH TOTAL SAVED SPACE AFTER DELETION-SPACE CLEANED UP IF DUPLICATE FILES ARE DELETED"
+      ],
+      "metadata": {
+        "id": "JvrbrsUbj3US"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "import shutil\n",
+        "\n",
+        "def get_directory_size(directory):\n",
+        "    total_size = 0\n",
+        "    with os.scandir(directory) as entries:\n",
+        "        for entry in entries:\n",
+        "            if entry.is_file():\n",
+        "                total_size += entry.stat().st_size\n",
+        "            elif entry.is_dir():\n",
+        "                total_size += get_directory_size(entry.path)\n",
+        "    return total_size\n",
+        "\n",
+        "def compare_and_create_union_and_duplicates_directories(dir1, dir2, union_dir, duplicates_dir):\n",
+        "    # Create the union directory if it doesn't exist\n",
+        "    if not os.path.exists(union_dir):\n",
+        "        os.makedirs(union_dir)\n",
+        "\n",
+        "    # Create the duplicates directory if it doesn't exist\n",
+        "    if not os.path.exists(duplicates_dir):\n",
+        "        os.makedirs(duplicates_dir)\n",
+        "\n",
+        "    # Get the list of files in each directory\n",
+        "    files_dir1 = set(os.listdir(dir1))\n",
+        "    files_dir2 = set(os.listdir(dir2))\n",
+        "\n",
+        "    # Find the union of files\n",
+        "    union_files = files_dir1.union(files_dir2)\n",
+        "\n",
+        "    # Find the intersection of files (duplicates)\n",
+        "    duplicate_files = files_dir1.intersection(files_dir2)\n",
+        "\n",
+        "    # Copy files from dir1 to union directory\n",
+        "    for file in union_files:\n",
+        "        source_path1 = os.path.join(dir1, file)\n",
+        "        destination_path = os.path.join(union_dir, file)\n",
+        "        if os.path.exists(source_path1):\n",
+        "            shutil.copy2(source_path1, destination_path)\n",
+        "\n",
+        "    # Copy files from dir2 to union directory\n",
+        "    for file in union_files:\n",
+        "        source_path2 = os.path.join(dir2, file)\n",
+        "        destination_path = os.path.join(union_dir, file)\n",
+        "        if os.path.exists(source_path2):\n",
+        "            shutil.copy2(source_path2, destination_path)\n",
+        "\n",
+        "    # Copy duplicate files to duplicates directory\n",
+        "    for file in duplicate_files:\n",
+        "        source_path1 = os.path.join(dir1, file)\n",
+        "        source_path2 = os.path.join(dir2, file)\n",
+        "        destination_path = os.path.join(duplicates_dir, file)\n",
+        "\n",
+        "        if os.path.exists(source_path1):\n",
+        "            shutil.copy2(source_path1, destination_path)\n",
+        "        elif os.path.exists(source_path2):\n",
+        "            shutil.copy2(source_path2, destination_path)\n",
+        "\n",
+        "    # Calculate and print the total size of each directory in gigabytes\n",
+        "    size_dir1_gb = get_directory_size(dir1) / (1024 ** 3)\n",
+        "    size_dir2_gb = get_directory_size(dir2) / (1024 ** 3)\n",
+        "    size_union_dir_gb = get_directory_size(union_dir) / (1024 ** 3)\n",
+        "    size_duplicates_dir_gb = get_directory_size(duplicates_dir) / (1024 ** 3)\n",
+        "\n",
+        "    print(f\"Total size of {dir1}: {size_dir1_gb:.2f} GB\")\n",
+        "    print(f\"Total size of {dir2}: {size_dir2_gb:.2f} GB\")\n",
+        "    print(f\"Total size of {union_dir}: {size_union_dir_gb:.2f} GB\")\n",
+        "    print(f\"Total size of {duplicates_dir}: {size_duplicates_dir_gb:.2f} GB\")\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    # Replace these paths with the paths of your directories\n",
+        "    directory1_path = \"/content/firstdownload\" # On Colab, Create a folder called firstdownload\n",
+        "    directory2_path = \"/content/seconddesktop\" # Same as above Create a 2nd folder called seconddesktop\n",
+        "    union_directory_path = \"C:/Users/user/Desktop/union_dir\"\n",
+        "    duplicates_directory_path = \"C:/Users/user/Desktop/duplicate_dir\"\n",
+        "\n",
+        "\n",
+        "    compare_and_create_union_and_duplicates_directories(directory1_path, directory2_path, union_directory_path, duplicates_directory_path)\n"
+      ],
+      "metadata": {
+        "id": "a3UeDU3vkAC-"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
